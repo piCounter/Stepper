@@ -29,7 +29,7 @@ def _fg_color(num):
 
 def _bg_color(num):
     '''background color from 0-255'''
-    return '\033[48;5;' + str(num) + 'm'
+    return '\033[48;5;' + str(num+1) + 'm'
 
 
 def _color_step_number_as_list(step_number_list):
@@ -41,7 +41,7 @@ def _color_step_number_as_list(step_number_list):
 
 def _color_step_instr(step_instructions, offset):
     '''format step instructions'''
-    offset = abs(offset)
+    offset = abs(offset-1)
     if offset == 0:
         highlight = 186
     else:
@@ -61,7 +61,11 @@ def _color_step_number_list_to_string(step_number_list):
 
 def split_line(line, offset):
     # split up each line for formatting
-    cut_index = list_file[line].index('>')
+    try:
+        cut_index = list_file[line].index('>')
+    except:
+        cut_index = 0
+
     # extract step numbers
     step_numbers_string = str(list_file[line][:cut_index])
     step_numbers_list = step_numbers_string.split('.')
@@ -75,7 +79,7 @@ def split_line(line, offset):
 
 def print_line(colored_line_list):
     '''print single line '''
-    print("{}{}{}".format(colored_line_list[0], colored_line_list[1], clear_color))
+    print("{}{}{}\n".format(colored_line_list[0], colored_line_list[1], clear_color))
     return None
 
 
@@ -83,27 +87,19 @@ def print_lines(height, current_line_number):
     '''print fill screen of lines'''
     for i in range(height):
         distance_from_center = round((height)/2)-i
-        print_line(split_line(current_line_number-distance_from_center, distance_from_center))
+        print_line(split_line(current_line_number - distance_from_center, distance_from_center))
     return None
 
 
 # main run area
 with open(file, 'r') as raw_file:
     '''
-    load file as string
-    parse string into list based on new lines
-    remove any empty newlines
-        strip_blanklines(file_list_strings)
-    parse each line for stepnumber and instruction
-    parse step number into list by '.'
-    color each number to indicate depth. return as string with uncolored '.' returned
-
-    print page of instructions with ambre coloring getting darker as instructions move away from center
-    in bash
-        increment tail by i in a for loop
-    in python
-        print list by i in a for loop
-            i - abs(height/2)  ???????
+    read file as large string. parce into list by line.
+    split list items (lines) by step number and instruction.
+    color step number to highlight stepping in and out of steps
+    print screen of lines with middle most line highlighted for emphasis.
+    have step color fade around current instruction
+    terminate gracefully
     '''
     list_file_w_blanklines = raw_file.readlines()
     global list_file
