@@ -2,4 +2,4 @@
 
 FILE=$1
 export FILE
-python3 ${HOME}/bin/onestep.py
+python3 ${PWD}/onestep.py
