@@ -29,15 +29,52 @@ def _fg_color(num):
 
 def _bg_color(num):
     '''background color from 0-255'''
-    return '\033[48;5;' + str(num+1) + 'm'
+    try:
+#        colors = {
+#                '0' : '1',      #red
+#                '1' : '40',     #green
+#                '2' : '11',     #yellow
+#                '3' : '129',    #purple
+#                '4' : '154',    #greenyellow
+#                '5' : '126',    #purplered
+#                '6' : '202',    #orangered
+#                '7' : '43',     #bluegreen
+#                '8' : '21',     #blue
+#                '9' : '208',    #orange
+#        }
+        # shades of blue green
+        colors = {
+                '0' : '19',
+                '1' : '24',
+                '2' : '29',
+                '3' : '34',
+                '4' : '21',
+                '5' : '26',
+                '6' : '31',
+                '7' : '36',
+                '8' : '41',
+                '9' : '46',
+        }
+        color = colors[num]
+    except:
+        color = num
+#    return '\033[48;5;' + str(num) + 'm'
+    return '\033[48;5;' + str(color) + 'm'
 
 
-def _color_step_number_as_list(step_number_list):
+#def _color_step_number_as_list(step_number_list):
+#    '''format step numbers'''
+#    for num in range(len(step_number_list)):
+#        step_number_list[num] = _bg_color(num) + ' ' + step_number_list[num] + ' ' + clear_color
+#    return step_number_list
+
+def _color_step_by_number_as_list(step_number_list):
     '''format step numbers'''
-    for num in range(len(step_number_list)):
-        step_number_list[num] = _bg_color(num) + ' ' + step_number_list[num] + ' ' + clear_color
+    index = 0
+    for num in step_number_list:
+        step_number_list[index] = _bg_color(num) + ' ' + step_number_list[index] + ' ' + clear_color
+        index += 1
     return step_number_list
-
 
 def _color_step_instr(step_instructions, offset):
     '''format step instructions'''
@@ -52,7 +89,8 @@ def _color_step_instr(step_instructions, offset):
 def _color_step_number_list_to_string(step_number_list):
     '''print single formatted line'''
    # color step numbers
-    step_colored_list = _color_step_number_as_list(step_number_list)
+#    step_colored_list = _color_step_number_as_list(step_number_list)
+    step_colored_list = _color_step_by_number_as_list(step_number_list)
     step_number_string = ''
     for i in range(len(step_number_list)):
         step_number_string += step_colored_list[i]
