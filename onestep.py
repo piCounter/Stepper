@@ -80,7 +80,8 @@ def _color_step_instr(step_instructions, offset):
     '''format step instructions'''
     offset = abs(offset-1)
     if offset == 0:
-        highlight = 186
+#        highlight = 186
+        highlight = 82
     else:
         highlight = 255 - offset
     return _fg_color(highlight)+step_instructions
